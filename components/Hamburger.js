@@ -2,9 +2,9 @@ import { StyleSheet, Pressable, Image } from 'react-native';
 
 const hamburger = require('../assets/hamburgerIcon.png');
 
-export default function Hamburger(onPress){
+export default function Hamburger({ onPress }){
     return(
-        <Pressable style={styles.container}>
+        <Pressable style={styles.container} onPress={onPress}>
             <Image style={styles.icon} source={hamburger}/>
         </Pressable>
     );
@@ -12,14 +12,11 @@ export default function Hamburger(onPress){
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#000',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
     },
     icon: {
         width: 20,
         height: 20,
+        margin: 10,
     },
 });

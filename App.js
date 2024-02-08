@@ -1,43 +1,54 @@
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Hamburger from './components/Hamburger';
+import IconButton from './components/IconButton';
+import MenuListItem from './components/MenuListItem';
+import { Overlay } from '@rneui/themed';
+import MenuHeader from './components/MenuHeader';
+import ItemDisplayer from './components/ItemDisplayer';
 
-import { useState } from 'react';
+const hamburger = require('./assets/hamburgerIcon.png');
+const settingIcon = require('./assets/settingsIcon.png');
+const accountIcon = require('./assets/accountIcon.png');
+const xIcon = require('./assets/xIcon.png');
+
 
 export default function App() {
   const [showMenu, setShowMenu] = useState(false);
+  const [showNewItem, setShowNewItem] = useState(false);
 
-  const menu = () => {
-    showMenu ? (
-      setShowMenu(false)
-    ) : (
-      setShowMenu(true)
-    )
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
   };
+  const toggleNewItem = () => {
+    setShowNewItem(!showNewItem);
+  }
 
   return (
     <View style={styles.container}>
 
-      <View style={styles.header}>
-        <Hamburger onPress={menu}/>
+      <View style={styles.headerContainer}>
+        <IconButton icon={hamburger} onPress={toggleMenu} size={20}/>
         <Text style={styles.headerText}>This is my header</Text>
       </View>
       <View style={styles.bodyContainer}>
-        <Text style={styles.text}>Open up App.js to start working on your app!</Text>
+        <ItemDisplayer/>
         <StatusBar style="auto" />
+        
       </View>
 
-      {showMenu ? (
-        <View>
-          <View style={styles.menuContainer}>
+      <Overlay isVisible={showNewItem} onBackdropPress={toggleNewItem} overlayStyle={styles.newItemContainer}>
+        <Text>tester</Text>
+      </Overlay>
 
-          </View>
-          <View style={{flex: 1, flexDirection: 'row'}}></View>
-        </View>
-      ) : (
-        <View>
-        </View>
-      )}
+      <Overlay isVisible={showMenu} onBackdropPress={toggleMenu} overlayStyle={styles.menuContainer}>
+        <MenuHeader xIcon={xIcon} close={toggleMenu} text={'menu'}/>
+        <MenuListItem onPress={()=>alert('account')} icon={accountIcon} text={'Account'}/>
+        <MenuListItem onPress={()=>alert('settings')} icon={settingIcon} text={'Settings'}/>
+        <MenuListItem onPress={()=>alert('settings')} icon={settingIcon} text={'Settings'}/>
+        <MenuListItem onPress={()=>alert('settings')} icon={settingIcon} text={'Settings'}/>
+      </Overlay>
+      
     </View>
   );
 }
@@ -51,25 +62,40 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 5,
     backgroundColor: '#25292e',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
+    width: '100%',
   },
   text: {
     color: '#000',
   },
   menuContainer: {
+    backgroundColor: '#25292e',
+    flexDirection: 'column',
     flex: 1,
-    backgroundColor: '#90f',
-    flexDirection: 'row',
+    alignItems: 'flex-start',
+    width: '66.7%',
+    position: 'absolute',
+    height: '100%',
+    left: 0,
   },
-  header: {
-    flex: 5,
+  headerContainer: {
     backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+    flex: 1,
   },
   headerText: {
     flex: 1,
     color: '#fff'
+  },
+  menuListContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  menuListIcon: {
+
   },
 });

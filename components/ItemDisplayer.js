@@ -5,16 +5,21 @@ const checked = require('../assets/checkboxChecked.png');
 const unChecked = require('../assets/checkboxUnchecked.png');
 
 export default function ItemDisplayer({items}){
+
+    const checkItem = (item) => {
+        item.checked=!item.checked;
+    };
+
     return(
         <View style={styles.container}>
             <FlatList data={items} 
                 renderItem={({item}) => 
                     <View style={styles.itemContainer}>
-                        <CheckBox iconChecked={checked} iconUnchecked={unChecked} size={20} style={styles.checkboxContainer}/>
+                        <CheckBox iconChecked={checked} iconUnchecked={unChecked} onPress={() => checkItem(item)} size={20} style={styles.checkboxContainer}/>
                         <View style={styles.textContainer}>
                             <Text style={styles.nameText}>{item.name}</Text>
                             <Text style={styles.descText}>{item.desc}</Text>
-                            <Text>{item.id}</Text>
+                            <Text>{item.checked}</Text>
                         </View>
                     </View>
                 }
@@ -51,6 +56,7 @@ const styles = StyleSheet.create({
     nameText: {
         fontSize: 18,
         fontWeight: 'bold',
+        
     },
     descText: {
 

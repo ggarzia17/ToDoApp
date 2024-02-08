@@ -18,5 +18,6 @@ const styles = StyleSheet.create({
     },
     text: {
         margin: 10,
+        color: '#ccc'
     },
 });

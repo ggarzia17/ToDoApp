@@ -19,15 +19,25 @@ const historyIcon = require('./assets/historyIcon.png');
 export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [showAddItem, setShowAddItem] = useState(false);
+  const [showClear, setShowClear] = useState(false);
   const [descText, onChangeDescText] = useState('');
   const [nameText, onChangeNameText] = useState('');
   const [listItems, setListItems] = useState([]);
   
+  const toggleShowClear = () => {
+    setShowClear(!showClear);
+  };
+
   const toggleAddItem = () => {
     setShowAddItem(!showAddItem);
   };
-  const clearListItems = () => {
+  const clearAllListItems = () => {
     setListItems([]);
+    toggleShowClear();
+  }
+  const clearDoneListItems = () => {
+    setListItems([]);
+    toggleShowClear();
   }
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -44,6 +54,7 @@ export default function App() {
         id:id,
         name: nameText,
         desc: descText,
+        checked: false,
       });
     }
     
@@ -59,7 +70,7 @@ export default function App() {
       },
       {
         icon: clearIcon,
-        press: clearListItems,
+        press: toggleShowClear,
       }
   ];
 
@@ -100,14 +111,14 @@ export default function App() {
 
       <Overlay isVisible={showAddItem} onBackdropPress={toggleAddItem} overlayStyle={styles.addItemContainer}>
         <KeyboardAvoidingView behavior='padding' enabled={true} style={{flex: 1}}>
-          <Text>Add new ToDo</Text>
+          <Text style={styles.text}>Add new ToDo</Text>
           <TextInput
             multiline
             style={styles.input}
             onChangeText={onChangeNameText}
             value={nameText}
             placeholder={'enter name'}
-            placeholderTextColor={'#000'}
+            placeholderTextColor={styles.text.color}
           />
           <TextInput
             multiline
@@ -115,7 +126,7 @@ export default function App() {
             onChangeText={onChangeDescText}
             value={descText}
             placeholder={'enter description'}
-            placeholderTextColor={'#000'}
+            placeholderTextColor={styles.text.color}
           />
           <TextButton text={'submit'} size={20} onPress={submit}/>
         </KeyboardAvoidingView>
@@ -125,6 +136,17 @@ export default function App() {
         <Menu items={MenuListItems} xIcon={xIcon} close={toggleMenu} text={'Menu'}/>
       </Overlay>
       
+      <Overlay isVisible={showClear} onBackdropPress={toggleShowClear} overlayStyle={styles.clearContainer}>
+        <Text style={[styles.text, {fontSize:18}]}>Are you sure yo want to clear items?</Text>
+        <View style={styles.clearButtonsContainer}>
+          <TextButton text={'Clear All'} onPress={clearAllListItems}/>
+          <TextButton text={'Clear Done'} onPress={clearDoneListItems}/>
+          <TextButton text={'Cancel'} onPress={toggleShowClear}/>
+        </View>
+        <View style={styles.clearButtonsContainer}>
+        </View>
+      </Overlay>
+
     </View>
   );
 }
@@ -134,6 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    textDecorationColor: '#fff',
   },
   bodyContainer: {
     flex: 5,
@@ -145,7 +168,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   text: {
-    color: '#000',
+    color: '#ccc',
   },
   menuContainer: {
     backgroundColor: '#25292e',
@@ -166,7 +189,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
-    color: '#fff'
+    color: '#ccc'
   },
   menuListContainer: {
     flex: 1,
@@ -185,5 +208,16 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    color: '#ccc',
+  },
+  clearContainer: {
+    backgroundColor: "#444",
+    gap: 10,
+    bottom: '25%',
+  },
+  clearButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10
   },
 });
